@@ -1,0 +1,85 @@
+<script>
+const images = [
+	"memes/meme1.jpg",
+	"memes/meme2.jpg",
+	"memes/meme3.jpg",
+	"memes/meme4.jpg"
+];
+speed = 10;
+interval = 100;
+maxSize = 100;
+
+padding = 10;
+vx = speed;
+vy = speed;
+px = 0;
+py = 0;
+img_index = 0;
+images.length;
+var preloadList = [];
+function main() {
+	var photo = document.getElementById("photo")
+	photo.src=images[0];
+	photo.style.transition = interval+"ms linear";
+	photo.style.maxWidth= maxSize + "px";
+	photo.style.maxHeight= maxSize + "px";
+	var intervalId = setInterval(animate, interval);
+	images.forEach(initImg);
+}
+function initImg(item, index, arr) {
+	var img = new Image();
+	img.src = item;
+	preloadList.push(img);
+}
+function animate() {
+	px += vx;
+	py += vy;
+	var photo = document.getElementById("photo")
+	var parent = photo.parentElement;
+	if (px + photo.clientWidth + padding> parent.clientWidth){
+		px = parent.clientWidth - photo.clientWidth - padding;
+		vx = -speed;
+		changePhoto();
+	}
+	if (px < padding) {
+		px = padding;
+		vx = speed;
+		changePhoto();
+	}
+	if (py + photo.clientHeight + padding> parent.clientHeight) {
+		py = parent.clientHeight - photo.clientHeight - padding;
+		vy = -speed;
+		changePhoto();
+	}
+	if (py < padding) {
+		py = padding;
+		vy = speed;
+		changePhoto();
+	}
+	photo.style.left = px+"px";
+	photo.style.top = py+"px";
+}
+function changePhoto() {
+	img_index += 1;
+	if (img_index >= images.length) img_index = 0;
+	var photo = document.getElementById("photo")
+	var preload = preloadList[img_index];
+	photo.src = images[img_index]
+	if (px + photo.clientWidth + padding > parent.clientWidth){
+		px = parent.clientWidth - photo.clientWidth - padding;
+	}
+	if (py + photo.clientHeight + padding > parent.clientHeight) {
+		py = parent.clientHeight - photo.clientHeight - padding;
+	}
+}
+</script>
+<style>
+img {
+	position: relative;
+}
+</style>
+<html>
+<body onload="main();">
+<img id="photo">
+</body>
+</html>
