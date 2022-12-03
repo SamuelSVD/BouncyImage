@@ -5,7 +5,9 @@ This small project allows someone to add the HTML file as a source to OBS and ha
 
 The file bouncy-photo.html is what is used as the web element.
 
-Edit the file and update the list of images at the top to point to whichever images you would like. In the example, "memes/meme1.jpg", etc. are the photos being used. This can be a web link to an image a relative filepath to the location of the file in your computer.
+Edit the file and update the list of images at the top to point to whichever images you would like. In the example, "memes/meme1.jpg", etc. are the photos being used.
+
+The photo should be a web link to an image or a relative filepath to the location of the file in your computer.
 
 You can also change the following:
 
