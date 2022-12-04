@@ -50,23 +50,31 @@ function animate() {
 	var parent = photo.parentElement;
 	if (px + photo.clientWidth + padding> parent.clientWidth){
 		px = parent.clientWidth - photo.clientWidth - padding;
-		vx = -speed;
-		hit = true;
+		if (vx != -speed) {
+			vx = -speed;
+			hit = true;
+		}
 	}
 	if (px < padding) {
 		px = padding;
-		vx = speed;
-		hit = true;
+		if (vx != speed) {
+			vx = speed;
+			hit = true;
+		}
 	}
 	if (py + photo.clientHeight + padding> parent.clientHeight) {
 		py = parent.clientHeight - photo.clientHeight - padding;
-		vy = -speed;
-		hit = true;
+		if (vy != -speed) {
+			vy = -speed;
+			hit = true;
+		}
 	}
 	if (py < padding) {
 		py = padding;
-		vy = speed;
-		hit = true;
+		if (vy != speed) {
+			vy = speed;
+			hit = true;
+		}
 	}
 	photo.style.left = px+"px";
 	photo.style.top = py+"px";
