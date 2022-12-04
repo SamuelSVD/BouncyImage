@@ -5,8 +5,7 @@ const images = [
 	"memes/meme3.jpg",
 	"memes/meme4.jpg"
 ];
-speed = 30;
-interval = 300;
+speed = 100;
 maxSize = 200;
 
 padding = 10;
@@ -18,67 +17,72 @@ img_index = 0;
 images.length;
 var hit = false;
 var preloadList = [];
+var maxPosX = 0;
+var minPosX = 0;
+var maxPosY = 0;
+var minPosY = 0;
 function main() {
 	var photo = document.getElementById("photo")
 	photo.src=images[0];
-	photo.style.transition = interval+"ms linear";
 	photo.style.maxWidth= maxSize + "px";
 	photo.style.maxHeight= maxSize + "px";
-	px = Math.floor(Math.random() * (photo.parentElement.clientWidth - maxSize));
-	py = Math.floor(Math.random() * (photo.parentElement.clientHeight - maxSize));
+	maxPosX = photo.parentElement.clientWidth - maxSize - padding * 2;
+	minPosX = padding * 2;
+	maxPosY = photo.parentElement.clientHeight - maxSize - padding * 2;
+	minPosY = padding * 2;
+	px = Math.floor(Math.random() * (maxPosX - minPosX)) + minPosX;
+	py = Math.floor(Math.random() * (maxPosY - minPosY)) + minPosY;
 	vx = (Math.random() > 0.5) ? speed : -speed;
 	vy = (Math.random() > 0.5) ? speed : -speed;
-	animate();
-	animate();
+	photo.style.left = px+"px";
+	photo.style.top = py+"px";
 	photo.hidden = false;
-	var intervalId = setInterval(animate, interval);
-	images.forEach(initImg);
+	animateV2();
 }
 function initImg(item, index, arr) {
 	var img = new Image();
 	img.src = item;
 	preloadList.push(img);
 }
-function animate() {
-	px += vx;
-	py += vy;
-	if (hit) {
-		changePhoto();
-		hit = false;
-	}
-	var photo = document.getElementById("photo")
+function animateV2() {
+	changePhoto();
+	var photo = document.getElementById("photo");
 	var parent = photo.parentElement;
-	if (px + photo.clientWidth + padding> parent.clientWidth){
-		px = parent.clientWidth - photo.clientWidth - padding;
-		if (vx != -speed) {
-			vx = -speed;
-			hit = true;
-		}
-	}
-	if (px < padding) {
-		px = padding;
-		if (vx != speed) {
-			vx = speed;
-			hit = true;
-		}
-	}
-	if (py + photo.clientHeight + padding> parent.clientHeight) {
-		py = parent.clientHeight - photo.clientHeight - padding;
-		if (vy != -speed) {
+	maxPosX = photo.parentElement.clientWidth - photo.width - padding;
+	minPosX = padding;
+	maxPosY = photo.parentElement.clientHeight - photo.height - padding;
+	minPosY = padding;
+	var timeToImpactX = ((vx > 0) ? (maxPosX - px) : (px - minPosX)) / (speed * 1.0);
+	var timeToImpactY = ((vy > 0) ? (maxPosY - py) : (py - minPosY)) / (speed * 1.0);
+	console.log(timeToImpactX, timeToImpactY);
+	var time = 0;
+	if (timeToImpactX > timeToImpactY) {
+		time = Math.floor(timeToImpactY * 1000);
+		if (vy > 0) {
 			vy = -speed;
-			hit = true;
-		}
-	}
-	if (py < padding) {
-		py = padding;
-		if (vy != speed) {
+			py = maxPosY;
+		} else {
 			vy = speed;
-			hit = true;
+			py = minPosY;
 		}
+		px = Math.min(px + vx * timeToImpactY, maxPosX);
+	} else {
+		time = Math.floor(timeToImpactX * 1000);
+		if (vx > 0) {
+			vx = -speed;
+			px = maxPosX;
+		} else {
+			vx = speed;
+			px = minPosX;
+		}
+		py = Math.min(py + vy * timeToImpactX, maxPosY);
 	}
+	photo.style.transition = time + "ms linear";
 	photo.style.left = px+"px";
 	photo.style.top = py+"px";
+	setTimeout(animateV2, time);
 }
+
 function changePhoto() {
 	img_index += 1;
 	if (img_index >= images.length) img_index = 0;
