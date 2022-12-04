@@ -5,9 +5,9 @@ const images = [
 	"memes/meme3.jpg",
 	"memes/meme4.jpg"
 ];
-speed = 10;
-interval = 100;
-maxSize = 100;
+speed = 30;
+interval = 300;
+maxSize = 200;
 
 padding = 10;
 vx = speed;
@@ -16,6 +16,7 @@ px = 0;
 py = 0;
 img_index = 0;
 images.length;
+var hit = false;
 var preloadList = [];
 function main() {
 	var photo = document.getElementById("photo")
@@ -23,6 +24,13 @@ function main() {
 	photo.style.transition = interval+"ms linear";
 	photo.style.maxWidth= maxSize + "px";
 	photo.style.maxHeight= maxSize + "px";
+	px = Math.floor(Math.random() * (photo.parentElement.clientWidth - maxSize));
+	py = Math.floor(Math.random() * (photo.parentElement.clientHeight - maxSize));
+	vx = (Math.random() > 0.5) ? speed : -speed;
+	vy = (Math.random() > 0.5) ? speed : -speed;
+	animate();
+	animate();
+	photo.hidden = false;
 	var intervalId = setInterval(animate, interval);
 	images.forEach(initImg);
 }
@@ -34,27 +42,31 @@ function initImg(item, index, arr) {
 function animate() {
 	px += vx;
 	py += vy;
+	if (hit) {
+		changePhoto();
+		hit = false;
+	}
 	var photo = document.getElementById("photo")
 	var parent = photo.parentElement;
 	if (px + photo.clientWidth + padding> parent.clientWidth){
 		px = parent.clientWidth - photo.clientWidth - padding;
 		vx = -speed;
-		changePhoto();
+		hit = true;
 	}
 	if (px < padding) {
 		px = padding;
 		vx = speed;
-		changePhoto();
+		hit = true;
 	}
 	if (py + photo.clientHeight + padding> parent.clientHeight) {
 		py = parent.clientHeight - photo.clientHeight - padding;
 		vy = -speed;
-		changePhoto();
+		hit = true;
 	}
 	if (py < padding) {
 		py = padding;
 		vy = speed;
-		changePhoto();
+		hit = true;
 	}
 	photo.style.left = px+"px";
 	photo.style.top = py+"px";
@@ -80,6 +92,6 @@ img {
 </style>
 <html>
 <body onload="main();">
-<img id="photo">
+<img id="photo" hidden>
 </body>
 </html>
