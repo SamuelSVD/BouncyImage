@@ -11,9 +11,7 @@ The photo should be a web link to an image or a relative filepath to the locatio
 
 You can also change the following:
 
-`speed` : change how fast the image moves on the screen
-
-`interval` : change how frequent the position of the image is updated
+`speed` : how fast the image moves on the screen in pixels per second
 
 `maxSize` : change the maximum width or height of the image bouncing around
 
