@@ -54,7 +54,7 @@ function animateV2() {
 	minPosY = padding;
 	var timeToImpactX = ((vx > 0) ? (maxPosX - px) : (px - minPosX)) / (speed * 1.0);
 	var timeToImpactY = ((vy > 0) ? (maxPosY - py) : (py - minPosY)) / (speed * 1.0);
-	console.log(timeToImpactX, timeToImpactY);
+	//console.log(timeToImpactX, timeToImpactY);
 	var time = 0;
 	if (timeToImpactX > timeToImpactY) {
 		time = Math.floor(timeToImpactY * 1000);
